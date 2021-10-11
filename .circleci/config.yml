@@ -16,6 +16,11 @@ jobs:
       - restore_cache: 
           key: npm-v1-dependencies-{{ checksum "yarn.lock" }}
   test:
+    docker:
+      - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:       
       - run: 
           name: Lint && format check && test ci 
@@ -29,3 +34,4 @@ workflows:
     jobs: 
       - build
       - test
+
