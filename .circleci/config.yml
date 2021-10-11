@@ -25,8 +25,8 @@ jobs:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}       
       - run: 
           name: Lint && format check && test ci 
-          command: >- 
-            yarn lint
+          command: |
+            yarn lint 
             yarn format:check
             yarn test
 workflows:
