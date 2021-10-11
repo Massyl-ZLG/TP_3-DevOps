@@ -18,15 +18,11 @@ jobs:
   test:
     steps:       
       - run: 
-          name: Lint
-          command: yarn lint
-      - run: 
-          name: yarn format check 
-          command: yarn format:check
-      - run:
-          name: yarn test ci 
-          command: yarn test
-
+          name: Lint && format check && test ci 
+          command: >- 
+            yarn lint
+            yarn format:check
+            yarn test
 workflows:
   version: 2
   build_and_test:
