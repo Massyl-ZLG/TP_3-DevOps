@@ -10,9 +10,9 @@ jobs:
       - checkout # check out the code in the project directory
       - run: yarn install 
       - save_cache: 
-          key: npm-v3-dependencies-{{ checksum "yarn.lock" }}
+          key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
           paths:
-            - node_module 
+            - node_modules 
   test:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
@@ -22,7 +22,7 @@ jobs:
     steps:
       - checkout 
       - restore_cache: 
-          key: npm-v3-dependencies-{{ checksum "yarn.lock" }}       
+          key: npm-v4-dependencies-{{ checksum "yarn.lock" }}       
       - run: 
           name: Lint && format check && test ci 
           command: >- 
