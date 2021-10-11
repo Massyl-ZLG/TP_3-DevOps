@@ -15,3 +15,6 @@ jobs:
             - ~/.stack
       - restore_cache: 
           key: npm-v1-dependencies-{{ checksum "yarn.lock" }}
+      - run: 
+          name: Lint
+          command: yarn lint     
