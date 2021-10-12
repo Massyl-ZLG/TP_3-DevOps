@@ -15,7 +15,8 @@ jobs:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
           paths:
             - node_modules 
-  test:
+  
+  test1:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
@@ -31,12 +32,35 @@ jobs:
             yarn lint 
             yarn format:check
             yarn test
+
+  test2:
+    docker:
+      - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference 
+      - image: circleci/postgres:9.6.2-alpine
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
+        environment: 
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+          POSTGRES_DB: psdb 
+    steps: 
+      - init
+      - run: 
+          name: yarn e2e test
+          environment: 
+            DATABASE_URL: postgres://psqluer:psqlpassword@localhost:5432/psdb
+          command: yarn test:e2e
+
 workflows:
   version: 2
   build_and_test:
     jobs: 
       - build
-      - test:
+      - test1:
           requires: 
             - build 
 
