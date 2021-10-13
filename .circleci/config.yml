@@ -71,13 +71,12 @@ jobs:
           command: yarn doc:build
       - store_artifacts:
               path: docs
-  build-docker-image: 
+  building-docker-image: 
     steps: 
-      - docker/build: 
-        image: app_ci 
-        tag: "latest"
-        registry: .
-
+      - run: 
+          name: build the docker image 
+          command: |
+            docker build -t app .
 workflows:
   version: 2
   build_and_test:
@@ -95,7 +94,7 @@ workflows:
             - build
             - test1
             - test2
-      - build-docker-image:
+      - building-docker-image:
           requires: 
             - build
             - test1
