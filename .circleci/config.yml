@@ -4,32 +4,32 @@ jobs:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
-          username: mydockerhub-user
+          username: massylz
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout # check out the code in the project directory
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
-      - run: yarn install 
-      - save_cache: 
+      - run: yarn install
+      - save_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
           paths:
-            - node_modules 
-  
+            - node_modules
+
   test1:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
-          username: mydockerhub-user
+          username: massylz
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
-      - checkout 
-      - restore_cache: 
-          key: npm-v4-dependencies-{{ checksum "yarn.lock" }}       
-      - run: 
-          name: Lint && format check && test ci 
+      - checkout
+      - restore_cache:
+          key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
+      - run:
+          name: Lint && format check && test ci
           command: |
-            yarn lint 
+            yarn lint
             yarn format:check
             yarn test
 
@@ -37,32 +37,32 @@ jobs:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference 
+          username: massylz
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
       - image: circleci/postgres:9.6.2-alpine
         auth:
-          username: mydockerhub-user
+          username: massylz
           password: $DOCKERHUB_PASSWORD
-        environment: 
+        environment:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: psdb 
+          POSTGRES_DB: psdb
     steps:
       - checkout
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
-      - run: 
+      - run:
           name: yarn e2e test
-          environment: 
+          environment:
             DATABASE_URL: postgres://postgres:postgres@localhost:5432/psdb
           command: yarn test:e2e
-  doc: 
+  doc:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference 
-    steps: 
+          username: massylz
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+    steps:
       - checkout
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
@@ -71,46 +71,46 @@ jobs:
           command: yarn doc:build
       - store_artifacts:
               path: docs
-  building-docker-image:  
+  building-docker-image:
     docker:
       - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
         auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference 
+          username: massylz
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
-      - setup_remote_docker    
-      - run: 
-          name: build the docker image 
+      - setup_remote_docker
+      - run:
+          name: build the docker image
           command: |
             docker build -t app .
       - run:
-          name: Try to login 
+          name: Try to login
           command: |
-            echo $DOCKERHUB_PASSWORD | docker login -u mydockerhub-user --password-stdin
+            echo $DOCKERHUB_PASSWORD | docker login -u massylz --password-stdin
       - run: docker push app
 
 workflows:
   version: 2
   build_and_test:
-    jobs: 
+    jobs:
       - build
       - test1:
-          requires: 
+          requires:
             - build
-      - test2: 
-          requires: 
+      - test2:
+          requires:
             - build
-            - test1  
-      - doc: 
-          requires: 
+            - test1
+      - doc:
+          requires:
             - build
             - test1
             - test2
       - building-docker-image:
-          requires: 
+          requires:
             - build
             - test1
             - test2
