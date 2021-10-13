@@ -90,7 +90,7 @@ jobs:
           name: Try to login
           command: |
             echo $DOCKERHUB_PASSWORD | docker login -u massylz --password-stdin
-      - run: docker push app
+            docker push app:latest
 
 workflows:
   version: 2
