@@ -69,7 +69,7 @@ jobs:
       - run:
           name: generating doc
           command: yarn doc:build
-      - store_artefacts:
+      - store_artifacts:
               path: docs    
 workflows:
   version: 2
