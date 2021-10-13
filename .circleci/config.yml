@@ -73,6 +73,15 @@ jobs:
               path: docs
   building-docker-image: 
     steps: 
+      docker:
+      - image: cimg/node:14.15.0 # the primary container, where your job's commands are run
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference 
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
       - run: 
           name: build the docker image 
           command: |
