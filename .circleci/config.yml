@@ -54,7 +54,7 @@ jobs:
       - run: 
           name: yarn e2e test
           environment: 
-            DATABASE_URL: postgres://psqluer:psqlpassword@localhost:5432/psdb
+            DATABASE_URL: postgres://postgres:postgres@localhost:5432/psdb
           command: yarn test:e2e
 
 workflows:
