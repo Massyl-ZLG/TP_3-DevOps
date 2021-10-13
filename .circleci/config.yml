@@ -82,5 +82,9 @@ workflows:
           requires: 
             - build
             - test1  
-
+      - doc: 
+          requires: 
+            - build
+            - test1
+            - test2
 
