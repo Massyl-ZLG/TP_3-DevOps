@@ -67,7 +67,8 @@ jobs:
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
       - run:
-          name: yarn doc:build
+          name: generating doc
+          command: yarn doc:build
       - store_artefacts:
               path: docs    
 workflows:
