@@ -86,7 +86,7 @@ jobs:
           name: build the docker image 
           command: |
             docker build -t app .
-      - run: echo "$DOCKERHUB_PASSWORD" | docker login --username mydockerhub-user --password-stdin
+      - run: echo "$DOCKERHUB_PASSWORD" | docker login -u mydockerhub-user --password-stdin
       - run: docker push app
 
 workflows:
