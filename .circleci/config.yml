@@ -68,6 +68,8 @@ jobs:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: yarn doc:build
+      - store_artefacts:
+              path: docs    
 workflows:
   version: 2
   build_and_test:
