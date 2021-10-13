@@ -81,10 +81,13 @@ jobs:
       - checkout
       - restore_cache:
           key: npm-v4-dependencies-{{ checksum "yarn.lock" }}
+      - setup_remote_docker    
       - run: 
           name: build the docker image 
           command: |
             docker build -t app .
+      - run: docker push app
+
 workflows:
   version: 2
   build_and_test:
